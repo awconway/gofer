@@ -654,8 +654,8 @@ gtable_add_grob(ggplotGrob(RoB_text), t=column_t, l=7, b=column_b) %>%
   
   # Meta-analysis column
   
-  gtable_add_grob(ma_grob, t=19,l=16) %>% 
-  gtable_add_grob(ma_axis, t=20,l=16) %>% # takes axis text from ma and adds to bottom
+  gtable_add_grob(ma_grob, t=4+ length(unique({{ data }}$Study))+1,l=16) %>% 
+  gtable_add_grob(ma_axis, t=4+ length(unique({{ data }}$Study))+2,l=16) %>% # takes axis text from ma and adds to bottom
   
   
   # Meta-analysis grob to left of results
@@ -677,7 +677,7 @@ gtable_add_grob(ggplotGrob(RoB_text), t=column_t, l=7, b=column_b) %>%
                                )+
                                scale_y_continuous(expand=c(0.1,0.1))
                              #   theme(plot.background = element_rect(fill = "#002a60"))
-  ), t=19, l=13, r=15) %>% 
+  ), t=4+ length(unique({{ data }}$Study))+1, l=13, r=15) %>% 
   
   # Dark blue on right of meta-analysis result
   
@@ -692,7 +692,7 @@ gtable_add_grob(ggplotGrob(RoB_text), t=column_t, l=7, b=column_b) %>%
                                )+
                                scale_y_continuous(expand=c(0.1,0.1))
                              #   theme(plot.background = element_rect(fill = "#002a60"))
-  ), t=19, l=17)
+  ), t=4+ length(unique({{ data }}$Study))+1, l=17)
 
 
 # function to add rectangles around each study
