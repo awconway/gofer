@@ -4,7 +4,7 @@
 #' 
 #' @export
 #' 
-gofer <- function(data, dodge_width = 0.7){
+gofer <- function(data, ma_effect, ma_lower, ma_upper, dodge_width = 0.7){
 
 year <- {{ data }} %>%
   distinct(Study,.keep_all = TRUE) %>% 
@@ -42,7 +42,7 @@ results <- {{ data }} %>%
   )+
   geom_point(aes(x=reorder(Study, Year), y=bias, alpha=group, size=n), colour = "#002a60", position = position_dodge(width = dodge_width), show.legend=FALSE)+
   geom_linerange(aes(x=reorder(reorder(Study, Year), Year), ymin=lower, ymax=upper, alpha=group), colour = "#002a60",size=1, position = position_dodge(width = dodge_width), show.legend=FALSE)+
-  geom_hline(yintercept = primary$bias_mean, linetype = 2, col = "#002a60") +
+  geom_hline(yintercept = ma_effect, linetype = 2, col = "#002a60") +
   scale_alpha_discrete(range = c(rep(1,4)))+
   coord_flip()+ 
   theme_void()+
@@ -218,12 +218,12 @@ RoB_text <- {{ data }} %>%
 
 
 ma <-  ggplot() +
-  geom_polygon(aes(x = c(primary$CI_U_rve, primary$bias_mean, primary$CI_L_rve, primary$bias_mean), 
-                   y = c(primary$bias_mean, 1, primary$bias_mean, -1)),
+  geom_polygon(aes(x = c(ma_upper, ma_effect, ma_lower, ma_effect), 
+                   y = c(ma_effect, 1, ma_effect, -1)),
                colour = "#002a60",
                fill=NA,
                size=2)+
-  geom_segment(aes(x=primary$bias_mean,xend=primary$bias_mean, y=-1, yend=1),
+  geom_segment(aes(x=ma_effect,xend=ma_effect, y=-1, yend=1),
                colour = "#002a60",
                fill=NA,
                size=2)+
