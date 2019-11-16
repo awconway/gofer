@@ -4,7 +4,7 @@
 \alias{gofer}
 \title{gofer diagram}
 \usage{
-gofer(data, dodge_width = 0.7)
+gofer(data, ma_effect, ma_lower, ma_upper, dodge_width = 0.7)
 }
 \description{
 gofer diagram

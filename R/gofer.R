@@ -34,12 +34,7 @@ results <- {{ data }} %>%
   separate(Study, c("Study", "Year"), sep = ", ")  %>% 
   mutate(Study = as.factor(Study)) %>% 
   mutate(Year = as.numeric(Year)) %>%
-  naniar::replace_with_na(replace = list(comments = "NA")) %>%
-  naniar::replace_with_na(replace = list(comments = "Slow core temperature changes")) %>%
-  naniar::replace_with_na(replace = list(comments =  "Off cardiopulmonary bypass")) %>% 
-  naniar::replace_with_na(replace = list(comments = "Intraoperative and postoperative")) %>% 
-  ggplot( aes(x=reorder(Study, Year), y=upper,label=comments)
-  )+
+  ggplot()+
   geom_point(aes(x=reorder(Study, Year), y=bias, alpha=group, size=n), colour = "#002a60", position = position_dodge(width = dodge_width), show.legend=FALSE)+
   geom_linerange(aes(x=reorder(reorder(Study, Year), Year), ymin=lower, ymax=upper, alpha=group), colour = "#002a60",size=1, position = position_dodge(width = dodge_width), show.legend=FALSE)+
   geom_hline(yintercept = ma_effect, linetype = 2, col = "#002a60") +
@@ -150,18 +145,18 @@ patients <- {{ data }} %>%
   theme_void()+
   coord_flip()
 
-
-comments <-  {{ data }} %>% 
-  separate(Study, c("Study", "Year"), sep = ", ")  %>% 
-  mutate(Study = as.factor(Study)) %>% 
-  mutate(Year = as.numeric(Year)) %>%
-  naniar::replace_with_na(replace = list(comments = "NA")) %>%
-  ggplot()+
-  geom_fit_text(aes(x=reorder(Study, Year), y=0, label = comments, alpha=group), place = "left", reflow=TRUE, 
-                position = position_dodge(width = dodge_width), show.legend=FALSE)+
-  scale_alpha_discrete(range = c(rep(1,4)))+
-  theme_void()+
-  coord_flip()
+# 
+# comments <-  {{ data }} %>% 
+#   separate(Study, c("Study", "Year"), sep = ", ")  %>% 
+#   mutate(Study = as.factor(Study)) %>% 
+#   mutate(Year = as.numeric(Year)) %>%
+#   naniar::replace_with_na(replace = list(comments = "NA")) %>%
+#   ggplot()+
+#   geom_fit_text(aes(x=reorder(Study, Year), y=0, label = comments, alpha=group), place = "left", reflow=TRUE, 
+#                 position = position_dodge(width = dodge_width), show.legend=FALSE)+
+#   scale_alpha_discrete(range = c(rep(1,4)))+
+#   theme_void()+
+#   coord_flip()
 
 
 RoB_icon <- {{ data }} %>% 
