@@ -141,8 +141,10 @@ patients <- {{ data }} %>%
   tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
+  dplyr::distinct(Study,.keep_all = TRUE) %>% 
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0,label=patients))+
-  ggplot2::geom_text(hjust="center", check_overlap = TRUE)+
+  ggfittext::geom_fit_text(ggplot2::aes(x=stats::reorder(Study, Year), y=0), place = "center", reflow=TRUE
+                           )+
   ggplot2::theme_void()+
   ggplot2::coord_flip()
 
@@ -206,7 +208,7 @@ RoB_text <- {{ data }} %>%
   #           hjust = "left",
   #           size=2.5,
   #           fontface="italic")+
-  ggfittext::geom_fit_text(place = "right", reflow=TRUE, 
+  ggfittext::geom_fit_text(place = "right", reflow=FALSE, grow = FALSE,
                 position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::theme_void()+
   ggplot2::coord_flip()+
