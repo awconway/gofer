@@ -48,7 +48,7 @@ results <- {{ data }} %>%
                                     colour = "white"), 
     panel.grid.minor = element_blank()
   )+
-  scale_y_continuous(expand=c(0.1,0.1), limits=c(min({{ data }}$lower),max({{ data }}$upper)))+
+  scale_y_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower)), pmax(max({{data}}$upper), ma_upper)))+
   scale_x_discrete(breaks = NULL) #removes horizontal grid lines
 # ggrepel::geom_label_repel(
 #   force=23,
@@ -232,7 +232,7 @@ ma <-  ggplot() +
     axis.text.x=element_text(size = 8)
   )+
   scale_y_continuous(expand=c(0,0), limits=c(-1,1))+
-  scale_x_continuous(expand=c(0.1,0.1), limits=c(min({{ data }}$lower),max({{ data }}$upper)))+
+  scale_x_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower)), pmax(max({{data}}$upper), ma_upper)))+
   scale_y_discrete(breaks = NULL)  #removes horizontal grid lines
 
 ma_grob <- ggplotGrob(ma)
