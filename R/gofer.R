@@ -699,7 +699,7 @@ gtable_add_grob(ggplotGrob(RoB_text), t=column_t, l=7, b=column_b) %>%
 addrectgrobs<-function(gt){
   for (i in 1:length(unique({{ data }}$Study))+4){ 
     gt<-gt %>% gtable_add_grob(roundrectGrob(gp=gpar(fill="transparent", col="gray")),
-                               t=i,l=2,r=18) 
+                               t=i,l=2,r=17) 
   }
   return(gt)
 }
