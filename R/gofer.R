@@ -17,7 +17,7 @@ year <- {{ data }} %>%
   ggplot2::coord_flip()
 
 study <- {{ data }} %>% 
-  distinct(Study,.keep_all = TRUE) %>% 
+  dplyr::distinct(Study,.keep_all = TRUE) %>% 
   tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
@@ -31,12 +31,12 @@ study <- {{ data }} %>%
 
 
 results <- {{ data }} %>% 
-  separate(Study, c("Study", "Year"), sep = ", ")  %>% 
-  mutate(Study = as.factor(Study)) %>% 
-  mutate(Year = as.numeric(Year)) %>%
+  tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
+  dplyr::mutate(Study = as.factor(Study)) %>% 
+  dplyr::mutate(Year = as.numeric(Year)) %>%
   ggplot2::ggplot()+
-  ggplot2::geom_point(ggplot2::aes(x=stats::reorder(Study, Year), y=bias, alpha=group, size=dplyr::n), colour = "#002a60", position = position_dodge(width = dodge_width), show.legend=FALSE)+
-  ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(stats::reorder(Study, Year), Year), ymin=lower, ymax=upper, alpha=group), colour = "#002a60",size=1, position = position_dodge(width = dodge_width), show.legend=FALSE)+
+  ggplot2::geom_point(ggplot2::aes(x=stats::reorder(Study, Year), y=bias, alpha=group, size=n), colour = "#002a60", position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+  ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(stats::reorder(Study, Year), Year), ymin=lower, ymax=upper, alpha=group), colour = "#002a60",size=1, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::geom_hline(yintercept = ma_effect, linetype = 2, col = "#002a60") +
   ggplot2::scale_alpha_discrete(range = c(rep(1,4)))+
   ggplot2::coord_flip()+ 
@@ -61,11 +61,11 @@ participants <- {{ data }} %>%
   tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
-  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=dplyr::n))+
-  ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=dplyr::n, alpha=group), 
+  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
+  ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=n, alpha=group), 
                  colour = "#930093", 
                  size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
-  ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=dplyr::n, label = dplyr::n, alpha=group), 
+  ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=n, label = n, alpha=group), 
              colour="#930093",
              label.r = grid::unit(0.4, "lines"),
              label.padding = grid::unit(0.2, "lines"),
@@ -98,7 +98,7 @@ measurements <- {{ data }} %>%
   dplyr::mutate(id = dplyr::row_number()) %>% 
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
-  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=dplyr::n))+
+  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
   ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=N, alpha=group), 
                  colour = "#930093", 
                  size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
