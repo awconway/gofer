@@ -1,6 +1,7 @@
 #' gofer diagram
 #' @rdname gofer
 #' @name gofer
+#' @param data # include here descriptions of each argument we include in the function
 #' 
 #' @export
 #' 
