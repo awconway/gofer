@@ -174,44 +174,24 @@ RoB_icon <- {{ data }} %>%
   dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Participant flow" = "RoB_flow")) %>% 
   dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Participant selection" = "RoB_selection")) %>% 
   dplyr::mutate(RoB_classification = factor(RoB_classification, 
-                                     levels = c("high","low","unclear"),
-                                     labels = c( "\uf00d","\uf00c", "\uf128"))) %>% 
-  ggplot2::ggplot()+
-  ggplot2::geom_point(ggplot2::aes(x=stats::reorder(Study, Year), y=0, colour=RoB_classification, alpha=RoB_domain), 
-             size=2,position = ggplot2::position_dodge(width = dodge_width), 
-             show.legend=FALSE)+
-  ggplot2::geom_text(ggplot2::aes(x=stats::reorder(Study, Year), y=0, label= RoB_classification, alpha=RoB_domain), 
-            family =  "FontAwesome", 
-            size =  1.5,
-            position = ggplot2::position_dodge(width = dodge_width),
-            show.legend=FALSE)+  
+                                            levels = c("high","low","unclear"),
+                                            labels = c( "\uf00d","\uf00c", "\uf128")
+  )) %>% 
+  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0, colour=RoB_classification, label= RoB_domain, alpha=RoB_domain))+
+  # ggplot2::geom_point(
+  #                     size=3,position = ggplot2::position_dodge(width = dodge_width),
+  #                     show.legend=FALSE)+
+  # ggplot2::geom_text(aes(label=RoB_classification),
+  #                    family =  "FontAwesome",
+  #                    size =  1.5,
+  #                    position = ggplot2::position_dodge(width = dodge_width),
+  #                    show.legend=FALSE)+
+  geom_label(position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE, size=3, label.padding=unit(0.1, "lines"))+
+  # ggfittext::geom_fit_text(place = "left", reflow=FALSE, grow = FALSE,
+  #                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::theme_void()+
   ggplot2::coord_flip()+
-  ggplot2::scale_color_manual(values=c("red", "green", "yellow"))+
-  ggplot2::scale_alpha_discrete(range = c(rep(1,4)))
-
-RoB_text <- {{ data }} %>% 
-  tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
-  dplyr::mutate(Study = as.factor(Study)) %>% 
-  dplyr::mutate(Year = as.numeric(Year)) %>%
-  dplyr::distinct(Study,.keep_all = TRUE) %>% 
-  tidyr::pivot_longer(cols = dplyr::starts_with("RoB"), names_to = "RoB_domain", values_to = "RoB_classification") %>% 
-  dplyr::select(Study, Year, RoB_domain, RoB_classification) %>% 
-  dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Zero heat flux" = "RoB_spoton")) %>% 
-  dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Comparator" = "RoB_comparator")) %>% 
-  dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Participant flow" = "RoB_flow")) %>% 
-  dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Participant selection" = "RoB_selection")) %>% 
-  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0, label=RoB_domain, alpha=RoB_domain))+
-  # geom_text(aes(x=reorder(Study, Year), y=0, label= RoB_domain, alpha=RoB_domain),
-  #           position = position_dodge(width = dodge_width),
-  #           show.legend=FALSE,
-  #           hjust = "left",
-  #           size=2.5,
-  #           fontface="italic")+
-  ggfittext::geom_fit_text(place = "right", reflow=FALSE, grow = FALSE,
-                position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
-  ggplot2::theme_void()+
-  ggplot2::coord_flip()+
+  ggplot2::scale_color_manual(values=c("red", "green", "orange"))+
   ggplot2::scale_alpha_discrete(range = c(rep(1,4)))
 
 
@@ -487,8 +467,7 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
   
   # RoB_text column
 
-gtable::gtable_add_grob(ggplot2::ggplotGrob(RoB_text), t=column_t, l=7, b=column_b) %>% 
-  gtable::gtable_add_grob(ggplot2::ggplotGrob(RoB_icon), t=column_t, l=8, b=column_b) %>%
+  gtable::gtable_add_grob(ggplot2::ggplotGrob(RoB_icon), t=column_t, l=7, r=8, b=column_b) %>%
   gtable::gtable_add_grob(grid::rasterGrob(RoB_img), t=column_head_t, b=axis_t, l=rob_section_l, r=rob_section_r) %>% 
   gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
                                     ggplot2::aes(x=0,y=0, 
