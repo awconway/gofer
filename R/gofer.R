@@ -177,7 +177,7 @@ RoB_icon <- {{ data }} %>%
                                             levels = c("high","low","unclear"),
                                             labels = c( "\uf00d","\uf00c", "\uf128")
   )) %>% 
-  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0, colour=RoB_classification, label= RoB_domain, alpha=RoB_domain))+
+  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0, fill=RoB_classification, label= RoB_domain, alpha=RoB_domain))+
   # ggplot2::geom_point(
   #                     size=3,position = ggplot2::position_dodge(width = dodge_width),
   #                     show.legend=FALSE)+
@@ -186,12 +186,12 @@ RoB_icon <- {{ data }} %>%
   #                    size =  1.5,
   #                    position = ggplot2::position_dodge(width = dodge_width),
   #                    show.legend=FALSE)+
-  geom_label(position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE, size=3, label.padding=unit(0.1, "lines"))+
+  geom_label(colour = "white", position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE, size=3, label.padding=unit(0.1, "lines"))+
   # ggfittext::geom_fit_text(place = "left", reflow=FALSE, grow = FALSE,
   #                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::theme_void()+
   ggplot2::coord_flip()+
-  ggplot2::scale_color_manual(values=c("red", "green", "orange"))+
+  ggplot2::scale_fill_manual(values=c("#DC143C", "#32CD32", "orange"))+
   ggplot2::scale_alpha_discrete(range = c(rep(1,4)))
 
 
@@ -233,9 +233,9 @@ age <- {{ data }} %>%
   dplyr::mutate(Year = as.numeric(Year)) %>%
   dplyr::distinct(Study,.keep_all = TRUE) %>% 
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0)) +
-  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = mean_age), size = 2, col = "orange red") +
-  ggplot2::geom_linerange(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_mean, ymax = upper_mean), size = 1, col = "orange red") +
-  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = median_age), size = 3, col = "orange", shape = "diamond") +
+  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = mean_age, col = "coral"), size = 2) +
+  ggplot2::geom_linerange(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_mean, ymax = upper_mean, col = "coral"), size = 1) +
+  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = median_age, shape = "diamond"), size = 3, col = "orange") +
   ggplot2::geom_errorbar(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_IQR, ymax = upper_IQR), size = 1, col = "orange", width = 0.5) +
   
   ggplot2::theme_void() +
