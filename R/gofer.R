@@ -2,10 +2,48 @@
 #' @rdname gofer
 #' @name gofer
 #' @param data # include here descriptions of each argument we include in the function
+#' @param range_title measurement type used for range title
+#' @param range_unit unit used for range
+#' @param range_results_subtitle measurement type used for results
+#' @param colour_study_title fill colour of the study title
+#' @param colour_RoB_title fill colour of the risk of bias title
+#' @param colour_participants_title fill colour of the participants title
+#' @param colour_mean_age colour for mean age
+#' @param shape_mean_age middle data point shape for mean age
+#' @param colour_median_age colour for median age
+#' @param shape_median_age middle data point shape for median age
+#' @param colour_age_background background colour for age
+#' @param colour_age_gridlines gridline colour for age
+#' @param colour_measurements_title fill colour of the measurements title
+#' @param colour_sample_size colour of the sample size
+#' @param colour_range colour for range
+#' @param colour_range_background background colour for range
+#' @param colour_range_gridlines gridline colour for range
+#' @param colour_measurements colour of the paired measurements
+#' @param colour_results_title fill colour of the results title
+#' @param colour_results colour of the results
+#' @param colour_results_background background colour for results
+#' @param colour_results_gridlines gridline colour for results
 #' 
 #' @export
 #' 
-gofer <- function(data, ma_effect, ma_lower, ma_upper, dodge_width = 0.7){
+gofer <- function(data, ma_effect, ma_lower, ma_upper, dodge_width = 0.7,
+                  range_title = "TEMPERATURE", range_unit = "°C",
+                  range_results_subtitle = "temperature (°C)",
+                  colour_study_title = "#0080ff", colour_RoB_title = "#52ae32",
+                  colour_participants_title = "#ee7219",
+                  colour_mean_age = "coral", shape_mean_age = "circle",
+                  colour_median_age = "orange", shape_median_age = "diamond",
+                  colour_age_background = "white",
+                  colour_age_gridlines = "#FFE5CC",
+                  colour_measurements_title = "#930093",
+                  colour_sample_size = "#930093", colour_range = "#990099",
+                  colour_range_background = "white",
+                  colour_range_gridlines = "#FFCCFF",
+                  colour_measurements = "#930093",
+                  colour_results_title = "#002a60", colour_results = "#002a60",
+                  colour_results_background = "#BFD5E3",
+                  colour_results_gridlines = "white"){
 
 year <- {{ data }} %>%
   dplyr::distinct(Study,.keep_all = TRUE) %>% 
@@ -36,17 +74,17 @@ results <- {{ data }} %>%
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
   ggplot2::ggplot()+
-  ggplot2::geom_point(ggplot2::aes(x=stats::reorder(Study, Year), y=bias, alpha=group, size=n), colour = "#002a60", position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
-  ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(stats::reorder(Study, Year), Year), ymin=lower, ymax=upper, alpha=group), colour = "#002a60",size=1, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+  ggplot2::geom_point(ggplot2::aes(x=stats::reorder(Study, Year), y=bias, alpha=group, size=n), colour = colour_results, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+  ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(stats::reorder(Study, Year), Year), ymin=lower, ymax=upper, alpha=group), colour = colour_results,size=1, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::geom_hline(yintercept = ma_effect, linetype = 2, col = "#002a60") +
   ggplot2::scale_alpha_discrete(range = c(rep(1,4)))+
   ggplot2::coord_flip()+ 
   ggplot2::theme_void()+
   ggplot2::theme(
-    panel.background = ggplot2::element_rect(fill = "#BFD5E3", colour = "white",
+    panel.background = ggplot2::element_rect(fill = colour_results_background, colour = "white",
                                     size = 2, linetype = "solid"),
     panel.grid.major = ggplot2::element_line(size = 0.5, linetype = 'solid',
-                                    colour = "white"), 
+                                    colour = colour_results_gridlines), 
     panel.grid.minor = ggplot2::element_blank()
   )+
   ggplot2::scale_y_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower), ma_lower), pmax(max({{data}}$upper), ma_upper)))+
@@ -64,10 +102,10 @@ participants <- {{ data }} %>%
   dplyr::mutate(Year = as.numeric(Year)) %>%
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
   ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=n, alpha=group), 
-                 colour = "#930093", 
+                 colour = colour_sample_size, 
                  size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=n, label = n, alpha=group), 
-             colour="#930093",
+             colour=colour_sample_size,
              label.r = grid::unit(0.4, "lines"),
              label.padding = grid::unit(0.2, "lines"),
              size=3,
@@ -88,7 +126,7 @@ participants <- {{ data }} %>%
             family =  "FontAwesome", 
             size =  3.5,
             vjust="center", 
-            colour = "#930093",
+            colour = colour_sample_size,
             position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::scale_y_continuous(expand = ggplot2::expand_scale(mult = c(0.1, .1)))
 
@@ -101,10 +139,10 @@ measurements <- {{ data }} %>%
   dplyr::mutate(Year = as.numeric(Year)) %>%
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
   ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=N, alpha=group), 
-                 colour = "#930093", 
+                 colour = colour_paired_measurements, 
                  size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=N, label = N, alpha=group), 
-             colour="#930093",
+             colour=colour_paired_measurements,
              label.r = grid::unit(0.4, "lines"),
              label.padding = grid::unit(0.2, "lines"),
              size=3,
@@ -186,7 +224,7 @@ RoB_icon <- {{ data }} %>%
   #                    size =  1.5,
   #                    position = ggplot2::position_dodge(width = dodge_width),
   #                    show.legend=FALSE)+
-  geom_label(colour = "white", position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE, size=3, label.padding=unit(0.1, "lines"))+
+  ggplot2::geom_label(colour = "white", position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE, size=3, label.padding=grid::unit(0.1, "lines"))+
   # ggfittext::geom_fit_text(place = "left", reflow=FALSE, grow = FALSE,
   #                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::theme_void()+
@@ -233,20 +271,20 @@ age <- {{ data }} %>%
   dplyr::mutate(Year = as.numeric(Year)) %>%
   dplyr::distinct(Study,.keep_all = TRUE) %>% 
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0)) +
-  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = mean_age, col = "coral"), size = 2) +
-  ggplot2::geom_linerange(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_mean, ymax = upper_mean, col = "coral"), size = 1) +
-  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = median_age, shape = "diamond"), size = 3, col = "orange") +
-  ggplot2::geom_errorbar(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_IQR, ymax = upper_IQR), size = 1, col = "orange", width = 0.5) +
+  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = mean_age), size = 2, col = colour_mean_age, shape = shape_mean_age) +
+  ggplot2::geom_linerange(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_mean, ymax = upper_mean), size = 1, col = colour_mean_age) +
+  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = median_age), size = 3, col = colour_median_age, shape = shape_median_age) +
+  ggplot2::geom_errorbar(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_IQR, ymax = upper_IQR), size = 1, col = colour_median_age, width = 0.5) +
   
   ggplot2::theme_void() +
   
   ggplot2::coord_flip() +
   
   ggplot2::theme(
-    panel.background = ggplot2::element_rect(fill = "white", colour = "white",
+    panel.background = ggplot2::element_rect(fill = colour_age_background, colour = "white",
                                     size = 2, linetype = "solid"),
     panel.grid.major = ggplot2::element_line(size = 0.5, linetype = 'solid',
-                                    colour = "#FFE5CC"), 
+                                    colour = colour_age_gridlines), 
     panel.grid.minor = ggplot2::element_blank(),
     axis.text.x=ggplot2::element_text(size=8)
   )+
@@ -301,16 +339,16 @@ temp <-  {{ data }} %>%
   dplyr::mutate(Yeademr = as.numeric(Year)) %>%
   dplyr::distinct(Study,.keep_all = TRUE) %>% 
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), ymin = lower_temp, ymax = upper_temp)) +
-  ggplot2::geom_errorbar(size = 1, color = "#990099", width = 0.5) +
+  ggplot2::geom_errorbar(size = 1, color = colour_range, width = 0.5) +
   
   ggplot2::coord_flip() +
   
   ggplot2::theme_void()+
   ggplot2::theme(
-    panel.background = ggplot2::element_rect(fill = "white", colour = "white",
+    panel.background = ggplot2::element_rect(fill = colour_range_background, colour = "white",
                                     size = 2, linetype = "solid"),
     panel.grid.major = ggplot2::element_line(size = 0.5, linetype = 'solid',
-                                    colour = "#FFCCFF"), 
+                                    colour = colour_range_gridlines), 
     panel.grid.minor = ggplot2::element_blank(),
     axis.text.x=ggplot2::element_text(size=8)
   )+
@@ -415,7 +453,7 @@ gt <- gt_grid  %>%
                                              place = "center",
                                              grow = FALSE)+
                                ggplot2::theme_void()+
-                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = "#0080ff"))
+                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_study_title))
   ), t=section_t,l=study_section_l, r=study_section_r) %>% 
   # First author column
   gtable::gtable_add_grob(ggplot2::ggplotGrob(study), t=column_t,l=2, b=column_b) %>% 
@@ -479,7 +517,7 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
                                  place = "center",
                                  grow = FALSE)+
                                ggplot2::theme_void()+
-                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = "#52ae32"))
+                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_RoB_title))
   ), t=section_t,l=rob_section_l, r=rob_section_r) %>% 
   
   # Age column
@@ -525,21 +563,21 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
                                  place = "center",
                                  grow = FALSE)+
                                ggplot2::theme_void()+
-                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = "#ee7219"))
+                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_participants_title))
   ), t=section_t,l=participants_section_l, r=participants_section_r) %>% 
   
   # Temperature section header
   
   gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
                                     ggplot2::aes(x=0,y=0, 
-                                        label = "\uf06d TEMPERATURE MEASUREMENTS"))+
+                                        label = glue::glue("\uf06d {range_title} MEASUREMENTS")))+
                                ggfittext::geom_fit_text(colour = "white",
                                              family = "fontawesome",
                                              fontface="bold",
                                              place = "center",
                                              grow = FALSE)+
                                ggplot2::theme_void()+
-                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = "#930093"))
+                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_measurements_title))
   ), t=section_t,l=temp_section_l, r=temp_section_r) %>% 
   
   # Comparison column 
@@ -561,7 +599,7 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
   gtable::gtable_add_grob(temp_grob, t=column_t,l=14, b=column_b) %>%
   gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
                                     ggplot2::aes(x=0,y=0, 
-                                        label = "Range (°C)"))+
+                                        label = glue::glue("Range ({range_unit})")))+
                                ggfittext::geom_fit_text(
                                  fontface="bold",
                                  place = "center")+
@@ -616,7 +654,7 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
                                  place = "center",
                                  grow = FALSE)+
                                ggplot2::theme_void()+
-                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = "#002a60"))
+                               ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
   ), t=section_t,l=16) %>%
   
   # Results column
@@ -625,7 +663,7 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
   
   gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
                                     ggplot2::aes(x=0,y=0, 
-                                        label = "Difference in temperature (°C) between comparator and ZHF"))+
+                                        label = glue::glue("Difference in {range_results_subtitle} between comparator and ZHF")))+
                                ggfittext::geom_fit_text(
                                  fontface="italic",
                                  place = "center",
