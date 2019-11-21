@@ -139,10 +139,10 @@ measurements <- {{ data }} %>%
   dplyr::mutate(Year = as.numeric(Year)) %>%
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
   ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=N, alpha=group), 
-                 colour = colour_paired_measurements, 
+                 colour = colour_measurements, 
                  size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=N, label = N, alpha=group), 
-             colour=colour_paired_measurements,
+             colour=colour_measurements,
              label.r = grid::unit(0.4, "lines"),
              label.padding = grid::unit(0.2, "lines"),
              size=3,
