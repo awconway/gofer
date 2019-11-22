@@ -30,6 +30,9 @@
 #' @param colour_results colour of the results
 #' @param colour_results_background background colour for results
 #' @param colour_results_gridlines gridline colour for results
+#' @param age_legend_text_direction either vertical or horizontal
+#' @param age_legend_text_size size of text for age legend
+#' @param age_legend_position position of legend within plot
 #' 
 #' @export
 #' 
@@ -60,7 +63,11 @@ gofer <- function(data,
                   colour_results_title = "#002a60", 
                   colour_results = "#002a60",
                   colour_results_background = "#BFD5E3",
-                  colour_results_gridlines = "white"){
+                  colour_results_gridlines = "white",
+                  age_legend_text_direction = "vertical",
+                  age_legend_text_size = 8,
+                  age_legend_position = c(0.2, 0.9)
+                  ){
 
 year <- {{ data }} %>%
   dplyr::distinct(Study,.keep_all = TRUE) %>% 
@@ -305,8 +312,9 @@ age <- {{ data_age }} %>%
     panel.grid.minor = ggplot2::element_blank(),
     axis.text.x=ggplot2::element_text(size=8),
     legend.title = ggplot2::element_blank(),
-    legend.direction = "horizontal",
-    legend.position = c(0.2,0.9)
+    legend.direction = age_legend_text_direction,
+    legend.position = age_legend_position,
+    legend.text = ggplot2::element_text(size=age_legend_text_size)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
   ggplot2::scale_colour_manual(values=c("#999999", "#56B4E9"), 
