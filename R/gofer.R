@@ -304,12 +304,12 @@ age <- {{ data_age }} %>%
                                              colour = colour_age_gridlines), 
     panel.grid.minor = ggplot2::element_blank(),
     axis.text.x=ggplot2::element_text(size=8),
-    legend.title = element_blank(),
+    legend.title = ggplot2::element_blank(),
     legend.direction = "horizontal",
     legend.position = c(0.2,0.9)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
-  scale_colour_manual(values=c("#999999", "#56B4E9"), 
+  ggplot2::scale_colour_manual(values=c("#999999", "#56B4E9"), 
                       labels=c("Mean (SD)", "Median (IQR)"))
 
 age_grob <- ggplot2::ggplotGrob(age)
