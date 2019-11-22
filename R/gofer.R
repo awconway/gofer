@@ -392,8 +392,8 @@ temp_grob$heights[temp_grob$layout$t[which(temp_grob$layout$name == "axis-b")]] 
 
 
 # using gtable seems to be the best option - see here for documentation: https://gtable.r-lib.org/index.html
-RoB_img <- magick::image_read(system.file("inst/RoB-wide.png", "gofer"))
-sex_img <- png::readPNG(RCurl::getURLContent("https://raw.githubusercontent.com/awconway/zhf-review/master/gofer/sex.png"))
+RoB_img <- png::readPNG(RCurl::getURLContent("https://raw.githubusercontent.com/awconway/gofer/master/inst/RoB-wide.png"))
+sex_img <- png::readPNG(RCurl::getURLContent("https://raw.githubusercontent.com/awconway/gofer/master/inst/sex.png"))
 
 gt_grid <- gtable::gtable(widths = grid::unit(c(0.05, #1 left space
                                   1,#2 First author
