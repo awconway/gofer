@@ -755,9 +755,5 @@ addrectgrobs<-function(gt){
 
 gt <- addrectgrobs(gt)  
 
-grid::grid.newpage() # use newpage and grid.draw to plot the gtable
-
-grid::grid.draw(gt)
-
   
 }
