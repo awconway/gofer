@@ -317,7 +317,7 @@ age <- {{ data_age }} %>%
     legend.text = ggplot2::element_text(size=age_legend_text_size)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
-  ggplot2::scale_colour_manual(values=c("#999999", "#56B4E9"), 
+  ggplot2::scale_colour_manual(values=c("#999999", "#ffa500"), 
                       labels=c("Mean (SD)", "Median (IQR)"))
 
 age_grob <- ggplot2::ggplotGrob(age)
