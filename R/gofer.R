@@ -2,6 +2,12 @@
 #' @rdname gofer
 #' @name gofer
 #' @param data # include here descriptions of each argument we include in the function
+#' @param data_age # dataframe in long format with four columns. 
+#' Column 1 (Study) should contain a character vector of study indentification 
+#' in the form of 'First author, year'. Eg Conway,2019. Second column (age_type)
+#' is a grouping variable with either 'mean' or 'median. Third column 
+#' (age_measure) is a grouping variable with either 'average', 'lower' or 'upper'.
+#' Fourth column (age) should be a numeric value for age.
 #' @param range_title measurement type used for range title
 #' @param range_unit unit used for range
 #' @param range_results_subtitle measurement type used for results
@@ -27,21 +33,32 @@
 #' 
 #' @export
 #' 
-gofer <- function(data, ma_effect, ma_lower, ma_upper, dodge_width = 0.7,
-                  range_title = "TEMPERATURE", range_unit = "°C",
+gofer <- function(data, 
+                  data_age,
+                  ma_effect, 
+                  ma_lower, 
+                  ma_upper, 
+                  dodge_width = 0.7,
+                  range_title = "TEMPERATURE", 
+                  range_unit = "°C",
                   range_results_subtitle = "temperature (°C)",
-                  colour_study_title = "#0080ff", colour_RoB_title = "#52ae32",
+                  colour_study_title = "#0080ff", 
+                  colour_RoB_title = "#52ae32",
                   colour_participants_title = "#ee7219",
-                  colour_mean_age = "coral", shape_mean_age = "circle",
-                  colour_median_age = "orange", shape_median_age = "diamond",
+                  colour_mean_age = "coral", 
+                  shape_mean_age = "circle",
+                  colour_median_age = "orange", 
+                  shape_median_age = "diamond",
                   colour_age_background = "white",
                   colour_age_gridlines = "#FFE5CC",
                   colour_measurements_title = "#930093",
-                  colour_sample_size = "#930093", colour_range = "#990099",
+                  colour_sample_size = "#930093", 
+                  colour_range = "#990099",
                   colour_range_background = "white",
                   colour_range_gridlines = "#FFCCFF",
                   colour_measurements = "#930093",
-                  colour_results_title = "#002a60", colour_results = "#002a60",
+                  colour_results_title = "#002a60", 
+                  colour_results = "#002a60",
                   colour_results_background = "#BFD5E3",
                   colour_results_gridlines = "white"){
 
@@ -265,31 +282,35 @@ ma_grob$heights[ma_grob$layout$t[which(ma_grob$layout$name == "axis-b")]] <- gri
 
 # Study characteristics data
 # Age  
-age <- {{ data }} %>%
+age <- {{ data_age }} %>%
   tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
   dplyr::distinct(Study,.keep_all = TRUE) %>% 
-  ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0)) +
-  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = mean_age), size = 2, col = colour_mean_age, shape = shape_mean_age) +
-  ggplot2::geom_linerange(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_mean, ymax = upper_mean), size = 1, col = colour_mean_age) +
-  ggplot2::geom_point(ggplot2::aes(x = stats::reorder(Study, Year), y = median_age), size = 3, col = colour_median_age, shape = shape_median_age) +
-  ggplot2::geom_errorbar(ggplot2::aes(x = stats::reorder(Study, Year), ymin = lower_IQR, ymax = upper_IQR), size = 1, col = colour_median_age, width = 0.5) +
-  
+  ggplot2::ggplot(ggplot2::aes(x = stats::reorder(Study, Year),  
+                               col = age_type)) +
+  ggplot2::geom_pointrange(ggplot2::aes(
+    y=select(filter(data_core_OT_age, age_measure=="average"), age)$age, 
+    ymin=select(filter(data_core_OT_age, age_measure=="lower"), age)$age,
+    ymax=select(filter(data_core_OT_age, age_measure=="upper"), age)$age
+  )
+  )+
   ggplot2::theme_void() +
-  
   ggplot2::coord_flip() +
-  
   ggplot2::theme(
     panel.background = ggplot2::element_rect(fill = colour_age_background, colour = "white",
-                                    size = 2, linetype = "solid"),
+                                             size = 2, linetype = "solid"),
     panel.grid.major = ggplot2::element_line(size = 0.5, linetype = 'solid',
-                                    colour = colour_age_gridlines), 
+                                             colour = colour_age_gridlines), 
     panel.grid.minor = ggplot2::element_blank(),
-    axis.text.x=ggplot2::element_text(size=8)
+    axis.text.x=ggplot2::element_text(size=8),
+    legend.title = element_blank(),
+    legend.direction = "horizontal",
+    legend.position = c(0.2,0.9)
   )+
-  
-  ggplot2::scale_x_discrete(breaks = NULL)  
+  ggplot2::scale_x_discrete(breaks = NULL) +
+  scale_colour_manual(values=c("#999999", "#56B4E9"), 
+                      labels=c("Mean (SD)", "Median (IQR)"))
 
 age_grob <- ggplot2::ggplotGrob(age)
 age_axis <- age_grob$grobs[[which(age_grob$layout$name == "axis-b")]]$children$axis[2] 
