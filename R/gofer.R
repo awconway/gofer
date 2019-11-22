@@ -290,9 +290,9 @@ age <- {{ data_age }} %>%
   ggplot2::ggplot(ggplot2::aes(x = stats::reorder(Study, Year),  
                                col = age_type)) +
   ggplot2::geom_pointrange(ggplot2::aes(
-    y=select(filter(data_core_OT_age, age_measure=="average"), age)$age, 
-    ymin=select(filter(data_core_OT_age, age_measure=="lower"), age)$age,
-    ymax=select(filter(data_core_OT_age, age_measure=="upper"), age)$age
+    y=dplyr::select(dplyr::filter(data_core_OT_age, age_measure=="average"), age)$age, 
+    ymin=dplyr::select(dplyr::filter(data_core_OT_age, age_measure=="lower"), age)$age,
+    ymax=dplyr::select(dplyr::filter(data_core_OT_age, age_measure=="upper"), age)$age
   )
   )+
   ggplot2::theme_void() +
@@ -304,12 +304,12 @@ age <- {{ data_age }} %>%
                                              colour = colour_age_gridlines), 
     panel.grid.minor = ggplot2::element_blank(),
     axis.text.x=ggplot2::element_text(size=8),
-    legend.title = element_blank(),
+    legend.title = ggplot2::element_blank(),
     legend.direction = "horizontal",
     legend.position = c(0.2,0.9)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
-  scale_colour_manual(values=c("#999999", "#56B4E9"), 
+  ggplot2::scale_colour_manual(values=c("#999999", "#56B4E9"), 
                       labels=c("Mean (SD)", "Median (IQR)"))
 
 age_grob <- ggplot2::ggplotGrob(age)
