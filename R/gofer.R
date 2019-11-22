@@ -253,7 +253,7 @@ RoB_icon <- {{ data }} %>%
   #                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::theme_void()+
   ggplot2::coord_flip()+
-  ggplot2::scale_fill_manual(values=c("#DC143C", "#32CD32", "orange"))+
+  ggplot2::scale_fill_manual(values=c("#DC143C", "#32CD32", "#ffa500"))+
   ggplot2::scale_alpha_discrete(range = c(rep(1,4)))
 
 
@@ -392,7 +392,7 @@ temp_grob$heights[temp_grob$layout$t[which(temp_grob$layout$name == "axis-b")]] 
 
 
 # using gtable seems to be the best option - see here for documentation: https://gtable.r-lib.org/index.html
-RoB_img <- png::readPNG(RCurl::getURLContent("https://raw.githubusercontent.com/awconway/zhf-review/master/gofer/RoB_wide.png"))
+RoB_img <- magick::image_read(system.file("inst/RoB-wide.png", "gofer"))
 sex_img <- png::readPNG(RCurl::getURLContent("https://raw.githubusercontent.com/awconway/zhf-review/master/gofer/sex.png"))
 
 gt_grid <- gtable::gtable(widths = grid::unit(c(0.05, #1 left space
