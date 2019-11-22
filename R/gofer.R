@@ -409,7 +409,7 @@ gt_grid <- gtable::gtable(widths = grid::unit(c(0.05, #1 left space
                                   1.3,#12 sample size
                                   1.3, #13 comparison
                                   1,#14 range
-                                  1.8,#15 Paired measurements
+                                  2,#15 Paired measurements
                                   3,#16 Results
                                   0.1, #17 right space for meta-analysis
                                   0.05 #18 Right space
