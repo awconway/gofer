@@ -33,6 +33,8 @@
 #' @param age_legend_text_direction either vertical or horizontal
 #' @param age_legend_text_size size of text for age legend
 #' @param age_legend_position position of legend within plot
+#' @param grade_rating GRADE rating for meta-analysis. Either High, Moderate
+#' Low, Very Low
 #' 
 #' @export
 #' 
@@ -66,7 +68,8 @@ gofer <- function(data,
                   colour_results_gridlines = "white",
                   age_legend_text_direction = "vertical",
                   age_legend_text_size = 8,
-                  age_legend_position = c(0.2, 0.9)
+                  age_legend_position = c(0.2, 0.9),
+                  grade_rating
                   ){
 
 year <- {{ data }} %>%
@@ -711,7 +714,7 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
   
   gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
                                     ggplot2::aes(x=0,y=0, 
-                                        label = "Pooled mean bias with population limits of agreement"))+
+                                        label = "Mean bias (95% limits of agreement)"))+
                                # geom_tile(fill = "#002a60")+
                                ggfittext::geom_fit_text( colour = "white",
                                               fontface="bold",
@@ -726,23 +729,97 @@ gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column
                                )+
                                ggplot2::scale_y_continuous(expand=c(0.1,0.1))
                              #   theme(plot.background = element_rect(fill = "#002a60"))
-  ), t=4+ length(unique({{ data }}$Study))+1, l=13, r=15) %>% 
+  ), t=4+ length(unique({{ data }}$Study))+1, l=14, r=15) %>% 
   
-  # Dark blue on right of meta-analysis result
+  # # Dark blue on right of meta-analysis result
+  # 
+  # gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
+  #                                   ggplot2::aes(x=0,y=0))+
+  #                              ggplot2::theme_void()+
+  #                              ggplot2::theme(
+  #                                panel.background = ggplot2::element_rect(fill = "#002a60", colour = "white",
+  #                                                                size = 2, linetype = "solid"),
+  #                                panel.grid.major = ggplot2::element_blank(), 
+  #                                panel.grid.minor = ggplot2::element_blank()
+  #                              )+
+  #                              ggplot2::scale_y_continuous(expand=c(0.1,0.1))
+  #                            #   theme(plot.background = element_rect(fill = "#002a60"))
+  # ), t=4+ length(unique({{ data }}$Study))+1, l=17) %>% 
+
+
+# Total number of studies
+
+gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
+                                                            ggplot2::aes(x=0,y=0, 
+                                                                         label = "Studies"))+
+                                              ggfittext::geom_fit_text(
+                                                colour = "white",
+                                                fontface="bold",
+                                                place = "center",
+                                                grow = FALSE)+
+                                              ggplot2::theme_void()+
+                                              ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+), t=4+ length(unique({{ data }}$Study))+1, l=study_section_l, r=study_section_l) %>% 
+  
+  gtable::gtable_add_grob(grid::textGrob(length(unique({{ data }}$Study)), gp=grid::gpar(col=colour_results_title, fontface="bold")),
+                          t=4+ length(unique({{ data }}$Study))+1,l=3,r=4)  %>% 
+  
+  # Total number of participants
   
   gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
-                                    ggplot2::aes(x=0,y=0))+
-                               ggplot2::theme_void()+
-                               ggplot2::theme(
-                                 panel.background = ggplot2::element_rect(fill = "#002a60", colour = "white",
-                                                                 size = 2, linetype = "solid"),
-                                 panel.grid.major = ggplot2::element_blank(), 
-                                 panel.grid.minor = ggplot2::element_blank()
-                               )+
-                               ggplot2::scale_y_continuous(expand=c(0.1,0.1))
-                             #   theme(plot.background = element_rect(fill = "#002a60"))
-  ), t=4+ length(unique({{ data }}$Study))+1, l=17)
+                                                              ggplot2::aes(x=0,y=0, 
+                                                                           label = "Participants"))+
+                                                ggfittext::geom_fit_text(
+                                                  colour = "white",
+                                                  fontface="bold",
+                                                  place = "center",
+                                                  grow = FALSE)+
+                                                ggplot2::theme_void()+
+                                                ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+  ), t=4+ length(unique({{ data }}$Study))+1, l=5, r=5) %>% 
+  
+  gtable::gtable_add_grob(grid::textGrob(sum({{ data }}$n, na.rm=TRUE), gp=grid::gpar(col=colour_results_title, fontface="bold")),
+                          t=4+ length(unique({{ data }}$Study))+1,l=6,r=7)  %>% 
 
+  
+# Total number of measurements
+
+gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
+                                                            ggplot2::aes(x=0,y=0, 
+                                                                         label = "Measurements"))+
+                                              ggfittext::geom_fit_text(
+                                                colour = "white",
+                                                fontface="bold",
+                                                place = "center",
+                                                grow = FALSE)+
+                                              ggplot2::theme_void()+
+                                              ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+), t=4+ length(unique({{ data }}$Study))+1, l=8, r=10) %>% 
+  
+  gtable::gtable_add_grob(grid::textGrob(sum({{ data }}$N, na.rm=TRUE), gp=grid::gpar(col=colour_results_title, fontface="bold")),
+                          t=4+ length(unique({{ data }}$Study))+1,l=11,r=11)  %>% 
+  
+  
+  # GRADE rating
+  
+  gtable::gtable_add_grob(ggplot2::ggplotGrob(ggplot2::ggplot(data=NULL,
+                                                              ggplot2::aes(x=0,y=0, 
+                                                                           label = "GRADE rating"))+
+                                                ggfittext::geom_fit_text(
+                                                  colour = "white",
+                                                  fontface="bold",
+                                                  place = "center",
+                                                  grow = FALSE)+
+                                                ggplot2::theme_void()+
+                                                ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+  ), t=4+ length(unique({{ data }}$Study))+1, l=12, r=12) %>% 
+  
+  gtable::gtable_add_grob(grid::textGrob(grade_rating, gp=grid::gpar(col=colour_results_title, fontface="bold")),
+                          t=4+ length(unique({{ data }}$Study))+1,l=13,r=13) 
+  
+  
+  gt<-gt %>% gtable::gtable_add_grob(grid::roundrectGrob(gp=grid::gpar(fill="transparent", col=colour_results_title)),
+                                     t=4+ length(unique({{ data }}$Study))+1,l=2,r=17) 
 
 # function to add rectangles around each study
 addrectgrobs<-function(gt){

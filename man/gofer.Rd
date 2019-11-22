@@ -4,7 +4,87 @@
 \alias{gofer}
 \title{gofer diagram}
 \usage{
-gofer(data, ma_effect, ma_lower, ma_upper, dodge_width = 0.7)
+gofer(data, data_age, ma_effect, ma_lower, ma_upper, dodge_width = 0.7,
+  range_title = "TEMPERATURE", range_unit = "°C",
+  range_results_subtitle = "temperature (°C)",
+  colour_study_title = "#0080ff", colour_RoB_title = "#52ae32",
+  colour_participants_title = "#ee7219", colour_mean_age = "coral",
+  shape_mean_age = "circle", colour_median_age = "orange",
+  shape_median_age = "diamond", colour_age_background = "white",
+  colour_age_gridlines = "#FFE5CC",
+  colour_measurements_title = "#930093",
+  colour_sample_size = "#930093", colour_range = "#990099",
+  colour_range_background = "white",
+  colour_range_gridlines = "#FFCCFF", colour_measurements = "#930093",
+  colour_results_title = "#002a60", colour_results = "#002a60",
+  colour_results_background = "#BFD5E3",
+  colour_results_gridlines = "white",
+  age_legend_text_direction = "vertical", age_legend_text_size = 8,
+  age_legend_position = c(0.2, 0.9), grade_rating)
+}
+\arguments{
+\item{data}{include here descriptions of each argument we include in the function}
+
+\item{data_age}{dataframe in long format with four columns.
+
+Column 1 (Study) should contain a character vector of study indentification
+in the form of 'First author, year'. Eg Conway,2019. Second column (age_type)
+is a grouping variable with either 'mean' or 'median. Third column
+(age_measure) is a grouping variable with either 'average', 'lower' or 'upper'.
+Fourth column (age) should be a numeric value for age.}
+
+\item{range_title}{measurement type used for range title}
+
+\item{range_unit}{unit used for range}
+
+\item{range_results_subtitle}{measurement type used for results}
+
+\item{colour_study_title}{fill colour of the study title}
+
+\item{colour_RoB_title}{fill colour of the risk of bias title}
+
+\item{colour_participants_title}{fill colour of the participants title}
+
+\item{colour_mean_age}{colour for mean age}
+
+\item{shape_mean_age}{middle data point shape for mean age}
+
+\item{colour_median_age}{colour for median age}
+
+\item{shape_median_age}{middle data point shape for median age}
+
+\item{colour_age_background}{background colour for age}
+
+\item{colour_age_gridlines}{gridline colour for age}
+
+\item{colour_measurements_title}{fill colour of the measurements title}
+
+\item{colour_sample_size}{colour of the sample size}
+
+\item{colour_range}{colour for range}
+
+\item{colour_range_background}{background colour for range}
+
+\item{colour_range_gridlines}{gridline colour for range}
+
+\item{colour_measurements}{colour of the paired measurements}
+
+\item{colour_results_title}{fill colour of the results title}
+
+\item{colour_results}{colour of the results}
+
+\item{colour_results_background}{background colour for results}
+
+\item{colour_results_gridlines}{gridline colour for results}
+
+\item{age_legend_text_direction}{either vertical or horizontal}
+
+\item{age_legend_text_size}{size of text for age legend}
+
+\item{age_legend_position}{position of legend within plot}
+
+\item{grade_rating}{GRADE rating for meta-analysis. Either High, Moderate
+Low, Very Low}
 }
 \description{
 gofer diagram
