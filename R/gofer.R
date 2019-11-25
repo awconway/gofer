@@ -320,8 +320,9 @@ age <- {{ data_age }} %>%
     legend.text = ggplot2::element_text(size=age_legend_text_size)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
-  ggplot2::scale_colour_manual(values=c("#999999", "#ffa500"), 
-                      labels=c("Mean (SD)", "Median (IQR)"))
+  ggplot2::scale_colour_manual(values=c("#ffffff", "#999999", "#ffa500" ),
+                               labels=c("", "Mean (SD)", "Median (IQR)"), drop=TRUE)
+
 
 age_grob <- ggplot2::ggplotGrob(age)
 age_axis <- age_grob$grobs[[which(age_grob$layout$name == "axis-b")]]$children$axis[2] 
