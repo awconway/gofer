@@ -300,9 +300,9 @@ age <- {{ data_age }} %>%
   ggplot2::ggplot(ggplot2::aes(x = stats::reorder(Study, Year),  
                                col = age_type)) +
   ggplot2::geom_pointrange(ggplot2::aes(
-    y=dplyr::select(dplyr::filter(data_core_OT_age, age_measure=="average"), age)$age, 
-    ymin=dplyr::select(dplyr::filter(data_core_OT_age, age_measure=="lower"), age)$age,
-    ymax=dplyr::select(dplyr::filter(data_core_OT_age, age_measure=="upper"), age)$age
+    y=dplyr::select(dplyr::filter({{ data_age }}, age_measure=="average"), age)$age, 
+    ymin=dplyr::select(dplyr::filter({{ data_age }}, age_measure=="lower"), age)$age,
+    ymax=dplyr::select(dplyr::filter({{ data_age }}, age_measure=="upper"), age)$age
   )
   )+
   ggplot2::theme_void() +
