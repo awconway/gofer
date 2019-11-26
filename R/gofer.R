@@ -114,7 +114,7 @@ results <- {{ data }} %>%
                                     colour = colour_results_gridlines), 
     panel.grid.minor = ggplot2::element_blank()
   )+
-  ggplot2::scale_y_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower), ma_lower), pmax(max({{data}}$upper), ma_upper)))+
+  ggplot2::scale_y_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower), ma_lower), pmax(max({{ data }}$upper), ma_upper)))+
   ggplot2::scale_x_discrete(breaks = NULL) #removes horizontal grid lines
 # ggrepel::geom_label_repel(
 #   force=23,
@@ -280,7 +280,7 @@ ma <-  ggplot2::ggplot() +
     axis.text.x=ggplot2::element_text(size = 8)
   )+
   ggplot2::scale_y_continuous(expand=c(0,0), limits=c(-1,1))+
-  ggplot2::scale_x_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower), ma_lower), pmax(max({{data}}$upper), ma_upper)))+
+  ggplot2::scale_x_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower), ma_lower), pmax(max({{ data }}$upper), ma_upper)))+
   ggplot2::scale_y_discrete(breaks = NULL)  #removes horizontal grid lines
 
 ma_grob <- ggplot2::ggplotGrob(ma)
