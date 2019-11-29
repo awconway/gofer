@@ -213,19 +213,6 @@ patients <- {{ data }} %>%
   ggplot2::theme_void()+
   ggplot2::coord_flip()
 
-# 
-# comments <-  {{ data }} %>% 
-#   separate(Study, c("Study", "Year"), sep = ", ")  %>% 
-#   mutate(Study = as.factor(Study)) %>% 
-#   mutate(Year = as.numeric(Year)) %>%
-#   naniar::replace_with_na(replace = list(comments = "NA")) %>%
-#   ggplot()+
-#   geom_fit_text(aes(x=reorder(Study, Year), y=0, label = comments, alpha=group), place = "left", reflow=TRUE, 
-#                 position = position_dodge(width = dodge_width), show.legend=FALSE)+
-#   scale_alpha_discrete(range = c(rep(1,4)))+
-#   theme_void()+
-#   coord_flip()
-
 
 RoB_icon <- {{ data }} %>% 
   tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
@@ -296,13 +283,13 @@ age <- {{ data_age }} %>%
   tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
   dplyr::mutate(Study = as.factor(Study)) %>% 
   dplyr::mutate(Year = as.numeric(Year)) %>%
-  dplyr::distinct(Study,.keep_all = TRUE) %>% 
+  tidyr::pivot_wider(names_from = age_measure, values_from = age) %>% 
   ggplot2::ggplot(ggplot2::aes(x = stats::reorder(Study, Year),  
                                col = age_type)) +
   ggplot2::geom_pointrange(ggplot2::aes(
-    y=dplyr::select(dplyr::filter({{ data_age }}, age_measure=="average"), age)$age, 
-    ymin=dplyr::select(dplyr::filter({{ data_age }}, age_measure=="lower"), age)$age,
-    ymax=dplyr::select(dplyr::filter({{ data_age }}, age_measure=="upper"), age)$age
+    y=average, 
+    ymin=lower,
+    ymax=upper
   )
   )+
   ggplot2::theme_void() +
@@ -320,8 +307,8 @@ age <- {{ data_age }} %>%
     legend.text = ggplot2::element_text(size=age_legend_text_size)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
-  ggplot2::scale_colour_manual(values=c("#ffffff", "#999999", "#ffa500" ),
-                               labels=c("", "Mean (SD)", "Median (IQR)"), drop=TRUE)
+  ggplot2::scale_colour_manual(values=c("#999999", "#ffa500" ),
+                               labels=c("Mean (SD)", "Median (IQR)"), na.translate=FALSE)
 
 
 age_grob <- ggplot2::ggplotGrob(age)
