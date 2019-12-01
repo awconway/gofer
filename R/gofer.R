@@ -68,7 +68,7 @@ gofer <- function(data,
                   colour_results_gridlines = "white",
                   age_legend_text_direction = "horizontal",
                   age_legend_text_size = 8,
-                  age_legend_position = c(0.5, 0.95),
+                  age_legend_position = c(0.5, 0.05),
                   grade_rating
                   ){
 
