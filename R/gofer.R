@@ -66,9 +66,9 @@ gofer <- function(data,
                   colour_results = "#002a60",
                   colour_results_background = "#BFD5E3",
                   colour_results_gridlines = "white",
-                  age_legend_text_direction = "vertical",
+                  age_legend_text_direction = "horizontal",
                   age_legend_text_size = 8,
-                  age_legend_position = c(0.2, 0.9),
+                  age_legend_position = c(0.5, 0.95),
                   grade_rating
                   ){
 
@@ -226,8 +226,7 @@ RoB_icon <- {{ data }} %>%
   dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Participant flow" = "RoB_flow")) %>% 
   dplyr::mutate(RoB_domain = forcats::fct_recode(RoB_domain, "Participant selection" = "RoB_selection")) %>% 
   dplyr::mutate(RoB_classification = factor(RoB_classification, 
-                                            levels = c("high","low","unclear"),
-                                            labels = c( "\uf00d","\uf00c", "\uf128")
+                                            levels = c("high","low","unclear")
   )) %>% 
   ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0, fill=RoB_classification, label= RoB_domain, alpha=RoB_domain))+
   # ggplot2::geom_point(
@@ -238,12 +237,13 @@ RoB_icon <- {{ data }} %>%
   #                    size =  1.5,
   #                    position = ggplot2::position_dodge(width = dodge_width),
   #                    show.legend=FALSE)+
-  ggplot2::geom_label(colour = "white", position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE, size=3, label.padding=grid::unit(0.1, "lines"))+
+  ggplot2::geom_label(colour = "white", position = ggplot2::position_dodge(width = dodge_width), 
+                      show.legend=FALSE, size=3, label.padding=grid::unit(0.1, "lines"), )+
   # ggfittext::geom_fit_text(place = "left", reflow=FALSE, grow = FALSE,
   #                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
   ggplot2::theme_void()+
   ggplot2::coord_flip()+
-  ggplot2::scale_fill_manual(values=c("#DC143C", "#32CD32", "#ffa500"))+
+  ggplot2::scale_fill_manual(values=c("high" = "#DC143C","low"= "#32CD32","unclear"= "#ffa500"))+
   ggplot2::scale_alpha_discrete(range = c(rep(1,4)))
 
 
@@ -307,8 +307,8 @@ age <- {{ data_age }} %>%
     legend.text = ggplot2::element_text(size=age_legend_text_size)
   )+
   ggplot2::scale_x_discrete(breaks = NULL) +
-  ggplot2::scale_colour_manual(values=c("#999999", "#ffa500" ),
-                               labels=c("Mean (SD)", "Median (IQR)"), na.translate=FALSE)
+  ggplot2::scale_colour_manual(values=c("mean_sd" = "#999999", "median_iqr" = "#ffa500" ),
+                               labels=c("mean_sd" ="Mean (SD)","median_iqr" = "Median (IQR)"), na.translate=FALSE)
 
 
 age_grob <- ggplot2::ggplotGrob(age)
