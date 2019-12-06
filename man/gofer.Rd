@@ -19,8 +19,8 @@ gofer(data, data_age, ma_effect, ma_lower, ma_upper, dodge_width = 0.7,
   colour_results_title = "#002a60", colour_results = "#002a60",
   colour_results_background = "#BFD5E3",
   colour_results_gridlines = "white",
-  age_legend_text_direction = "vertical", age_legend_text_size = 8,
-  age_legend_position = c(0.2, 0.9), grade_rating)
+  age_legend_text_direction = "horizontal", age_legend_text_size = 8,
+  age_legend_position = c(0.5, 0.02), grade_rating)
 }
 \arguments{
 \item{data}{include here descriptions of each argument we include in the function}

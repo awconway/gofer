@@ -825,12 +825,3 @@ gofer <- function(data,
    
    
 }
-  
-
-
-gofer_plot <- gofer(data = data_core, ma_effect = ma_core$effect_estimate,
-               ma_lower = ma_core$lower_limit, ma_upper = ma_core$upper_limit,
-               grade_rating="Moderate", data_age = data_core_age)
-
-grid::grid.newpage()
-grid::grid.draw(gofer_plot)
