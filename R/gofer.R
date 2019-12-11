@@ -35,6 +35,7 @@
 #' @param age_legend_position position of legend within plot
 #' @param grade_rating GRADE rating for meta-analysis. Either High, Moderate
 #' Low, Very Low
+#' @param measurements_logscale TRUE or FALSE to use log scale transformation for measurements component
 #' 
 #' @export
 #' 
@@ -69,6 +70,7 @@ gofer <- function(data,
                   age_legend_text_direction = "horizontal",
                   age_legend_text_size = 8,
                   age_legend_position = c(0.5, 0.02),
+                  measurements_logscale =FALSE,
                   grade_rating
 ){
   
@@ -140,26 +142,50 @@ gofer <- function(data,
   
   
   
-  measurements <- {{ data }} %>% 
-    tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
-    dplyr::mutate(id = dplyr::row_number()) %>% 
-    dplyr::mutate(Study = as.factor(Study)) %>% 
-    dplyr::mutate(Year = as.numeric(Year)) %>%
-    dplyr::arrange(-Year) %>% 
-    ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
-    ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=N, alpha=group), 
-                            colour = colour_measurements, 
-                            size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
-    ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=N, label = N, alpha=group), 
-                        colour=colour_measurements,
-                        label.r = grid::unit(0.4, "lines"),
-                        label.padding = grid::unit(0.2, "lines"),
-                        size=3,
-                        position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
-    ggplot2::scale_alpha_discrete(range = c(rep(1,4)))+
-    ggplot2::coord_flip()+
-    ggplot2::theme_void()+
-    ggplot2::scale_y_continuous(trans='log', expand = ggplot2::expand_scale(mult = c(0.1, .1)))
+  if (measurements_logscale == TRUE){
+    measurements <-  {{ data }} %>% 
+      tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
+      dplyr::mutate(id = dplyr::row_number()) %>% 
+      dplyr::mutate(Study = as.factor(Study)) %>% 
+      dplyr::mutate(Year = as.numeric(Year)) %>%
+      dplyr::arrange(-Year) %>% 
+      ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
+      ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=N, alpha=group), 
+                              colour = colour_measurements, 
+                              size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+      ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=N, label = N, alpha=group), 
+                          colour=colour_measurements,
+                          label.r = grid::unit(0.4, "lines"),
+                          label.padding = grid::unit(0.2, "lines"),
+                          size=3,
+                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+      ggplot2::scale_alpha_discrete(range = c(rep(1,4)))+
+      ggplot2::coord_flip()+
+      ggplot2::theme_void()+
+      ggplot2::scale_y_continuous(trans="log", 
+                                  expand = ggplot2::expand_scale(mult = c(0.1, .1)))
+  } else {
+    measurements <- {{ data }} %>% 
+      tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
+      dplyr::mutate(id = dplyr::row_number()) %>% 
+      dplyr::mutate(Study = as.factor(Study)) %>% 
+      dplyr::mutate(Year = as.numeric(Year)) %>%
+      dplyr::arrange(-Year) %>% 
+      ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=n))+
+      ggplot2::geom_linerange(ggplot2::aes(x=stats::reorder(Study, Year), ymin=0, ymax=N, alpha=group), 
+                              colour = colour_measurements, 
+                              size=0.5, position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+      ggplot2::geom_label(ggplot2::aes(x=stats::reorder(Study, Year), y=N, label = N, alpha=group), 
+                          colour=colour_measurements,
+                          label.r = grid::unit(0.4, "lines"),
+                          label.padding = grid::unit(0.2, "lines"),
+                          size=3,
+                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
+      ggplot2::scale_alpha_discrete(range = c(rep(1,4)))+
+      ggplot2::coord_flip()+
+      ggplot2::theme_void()+
+      ggplot2::scale_y_continuous( expand = ggplot2::expand_scale(mult = c(0.1, .1)))
+  }
   
   
   comparison <- {{ data }} %>% 
@@ -206,18 +232,8 @@ gofer <- function(data,
     )) %>% 
     dplyr::arrange(-Year) %>%
     ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=0, fill=RoB_classification, label= RoB_domain, alpha=RoB_domain))+
-    # ggplot2::geom_point(
-    #                     size=3,position = ggplot2::position_dodge(width = dodge_width),
-    #                     show.legend=FALSE)+
-    # ggplot2::geom_text(aes(label=RoB_classification),
-    #                    family =  "FontAwesome",
-    #                    size =  1.5,
-    #                    position = ggplot2::position_dodge(width = dodge_width),
-    #                    show.legend=FALSE)+
     ggplot2::geom_label(colour = "white", position = ggplot2::position_dodge(width = dodge_width), 
                         show.legend=FALSE, size=3, label.padding=grid::unit(0.1, "lines"), )+
-    # ggfittext::geom_fit_text(place = "left", reflow=FALSE, grow = FALSE,
-    #                          position = ggplot2::position_dodge(width = dodge_width), show.legend=FALSE)+
     ggplot2::theme_void()+
     ggplot2::coord_flip()+
     ggplot2::scale_fill_manual(values=c("high" = "#DC143C","low"= "#32CD32","unclear"= "#ffa500"))+
@@ -243,7 +259,6 @@ gofer <- function(data,
       panel.grid.minor = ggplot2::element_blank(),
       axis.text.x=ggplot2::element_text(size = 8)
     )+
-    ggplot2::scale_y_continuous(expand=c(0,0), limits=c(-1,1))+
     ggplot2::scale_x_continuous(expand=c(0.1,0.1), limits=c(pmin(min({{ data }}$lower), ma_lower), pmax(max({{ data }}$upper), ma_upper)))+
     ggplot2::scale_y_discrete(breaks = NULL)  #removes horizontal grid lines
   
@@ -308,15 +323,7 @@ gofer <- function(data,
     ggplot2::geom_col(position = "fill", show.legend = FALSE,
                       width = 0.3) +
     ggplot2::scale_fill_manual(values = c("female" = "#ff8ea2", "male" = "#8edaff"))+
-    
-    # geom_text(label = "\uf183", family = "FontAwesome", x = 13.25, y = -0.25, size = 7, show.legend = FALSE) +
-    # geom_text(label = "\uf182", family = "FontAwesome", x = 13.25, y = 1.25, fill = "salmon", color = "salmon") +
-    # 
     ggplot2::coord_flip() +
-    
-    # expand_limits(y = -0.35) +
-    # expand_limits(y = 1.35) +
-    
     ggplot2::theme_void()
   
   flags <- {{ data }} %>%
@@ -325,11 +332,9 @@ gofer <- function(data,
     dplyr::mutate(Year = as.numeric(Year)) %>%
     dplyr::distinct(Study,.keep_all = TRUE) %>% 
     dplyr::arrange(-Year) %>%
-    ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=Country)) +
+    ggplot2::ggplot(ggplot2::aes(x=stats::reorder(Study, Year), y=code)) +
     ggimage::geom_flag(y = 0.5, ggplot2::aes(image = code), size = 0.2) +
-    
     ggplot2::coord_flip() +
-    
     ggplot2::theme_void()
   
   
@@ -462,28 +467,10 @@ gofer <- function(data,
     # Country column
   
   gtable::gtable_add_grob(ggplot2::ggplotGrob(flags), t=column_t,l=4, b=column_b) %>%
-    # gtable_add_grob(ggplotGrob(ggplot(data=NULL,
-    #                                   aes(x=0,y=0, 
-    #                                       label = "Country"))+
-    #                              geom_fit_text(
-    #                                fontface="bold",
-    #                                place = "center")+
-    #                              theme_void()+
-    #                              theme(plot.background = element_rect(fill = "white"))
-    # ), t=3,l=4) %>% 
     
     # Population column
   
   gtable::gtable_add_grob(ggplot2::ggplotGrob(patients), t=column_t, l=5, b=column_b) %>% 
-    # gtable_add_grob(ggplotGrob(ggplot(data=NULL,
-    #                                   aes(x=0,y=0, 
-    #                                       label = "Population"))+
-    #                              geom_fit_text(
-    #                                fontface="bold",
-    #                                place = "center")+
-    #                              theme_void()+
-    #                              theme(plot.background = element_rect(fill = "white"))
-    # ), t=3,l=5) %>% 
     
     # RoB_text column
   
@@ -521,15 +508,6 @@ gofer <- function(data,
     # Sex column
     
     gtable::gtable_add_grob(ggplot2::ggplotGrob(sex), t=column_t,l=11, b=column_b) %>%
-    # gtable_add_grob(ggplotGrob(ggplot(data=NULL,
-    #                                   aes(x=0,y=0, 
-    #                                       label = "Sex"))+
-    #                              geom_fit_text(
-    #                                fontface="bold",
-    #                                place = "center")+
-    #                              theme_void()+
-    #                              theme(plot.background = element_rect(fill = "white"))
-    # ), t=3,l=11) %>% 
     
     gtable::gtable_add_grob(grid::rasterGrob(sex_img), t=column_head_t, b=axis_t, l=11) %>% 
     
@@ -590,11 +568,6 @@ gofer <- function(data,
     ), t=column_head_t,l=14) %>% 
     
     gtable::gtable_add_grob(temp_axis, t=axis_t,l=14) %>% # takes axis text from ma and adds to bottom
-    
-    
-    # Comments column
-    
-    # gtable_add_grob(ggplotGrob(comments), t=column_t, l=14, b=column_b) %>% 
     
     
     # Sample size 
