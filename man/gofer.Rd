@@ -20,7 +20,8 @@ gofer(data, data_age, ma_effect, ma_lower, ma_upper, dodge_width = 0.7,
   colour_results_background = "#BFD5E3",
   colour_results_gridlines = "white",
   age_legend_text_direction = "horizontal", age_legend_text_size = 8,
-  age_legend_position = c(0.5, 0.02), grade_rating)
+  age_legend_position = c(0.5, 0.02), measurements_logscale = FALSE,
+  grade_rating)
 }
 \arguments{
 \item{data}{include here descriptions of each argument we include in the function}
@@ -82,6 +83,8 @@ Fourth column (age) should be a numeric value for age.}
 \item{age_legend_text_size}{size of text for age legend}
 
 \item{age_legend_position}{position of legend within plot}
+
+\item{measurements_logscale}{TRUE or FALSE to use log scale transformation for measurements component}
 
 \item{grade_rating}{GRADE rating for meta-analysis. Either High, Moderate
 Low, Very Low}
