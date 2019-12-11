@@ -164,7 +164,7 @@ gofer <- function(data,
       ggplot2::theme_void()+
       ggplot2::scale_y_continuous(trans="log", 
                                   expand = ggplot2::expand_scale(mult = c(0.1, .1)))
-  } else {
+  } if (measurements_logscale == FALSE) {
     measurements <- {{ data }} %>% 
       tidyr::separate(Study, c("Study", "Year"), sep = ", ")  %>% 
       dplyr::mutate(id = dplyr::row_number()) %>% 
