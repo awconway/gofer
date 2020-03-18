@@ -459,7 +459,7 @@ gofer <- function(data,
                                                                            place = "center",
                                                                            grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_study_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_study_title))
     ), t=section_t,l=study_section_l, r=study_section_r) %>% 
     # First author column
     gtable::gtable_add_grob(ggplot2::ggplotGrob(study), t=column_t,l=3, b=column_b) %>% 
@@ -486,7 +486,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_RoB_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_RoB_title))
     ), t=section_t,l=rob_section_l, r=rob_section_r) %>% 
     
     # Age column
@@ -499,7 +499,7 @@ gofer <- function(data,
                                                     fontface="bold",
                                                     place = "center")+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = "white"))
     ), t=column_head_t,l=10) %>% 
     gtable::gtable_add_grob(age_axis, t=axis_t,l=10) %>% # takes axis text from ma and adds to bottom
     
@@ -523,7 +523,9 @@ gofer <- function(data,
                                                     place = "center",
                                                     grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_participants_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_participants_title,
+                                                                                                         colour = NA),
+                                                                 )
     ), t=section_t,l=participants_section_l, r=participants_section_r) %>% 
     
     # Temperature section header
@@ -537,7 +539,7 @@ gofer <- function(data,
                                                                            place = "center",
                                                                            grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_measurements_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_measurements_title))
     ), t=section_t,l=temp_section_l, r=temp_section_r) %>% 
     
     # Comparison column 
@@ -551,7 +553,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     reflow = TRUE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = "white"))
     ), t=column_head_t,l=12) %>% 
     
     # temperature range column
@@ -564,7 +566,7 @@ gofer <- function(data,
                                                     fontface="bold",
                                                     place = "center")+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = "white"))
     ), t=column_head_t,l=14) %>% 
     
     gtable::gtable_add_grob(temp_axis, t=axis_t,l=14) %>% # takes axis text from ma and adds to bottom
@@ -580,7 +582,7 @@ gofer <- function(data,
                                                     fontface="bold",
                                                     place = "center")+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = "white"))
     ), t=column_head_t,l=13) %>% 
     
     # paired measurements
@@ -594,7 +596,7 @@ gofer <- function(data,
                                                     place = "left",
                                                     reflow = TRUE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = "white"))
     ), t=column_head_t,l=15) %>% 
     
     # Results section header
@@ -609,7 +611,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_results_title))
     ), t=section_t,l=16) %>%
     
     # Results column
@@ -624,7 +626,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     reflow = TRUE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white"))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = "white"))
     ), t=column_head_t,b=axis_t, l=16) %>% 
     
     # Meta-analysis column
@@ -666,7 +668,7 @@ gofer <- function(data,
                                                   place = "center",
                                                   grow = FALSE)+
                                                 ggplot2::theme_void()+
-                                                ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+                                                ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_results_title))
   ), t=4+ length(unique({{ data }}$Study))+1, l=3, r=3) %>% 
     
     gtable::gtable_add_grob(grid::textGrob(length(unique({{ data }}$Study)), gp=grid::gpar(col=colour_results_title, fontface="bold")),
@@ -683,7 +685,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_results_title))
     ), t=4+ length(unique({{ data }}$Study))+1, l=5, r=5) %>% 
     
     gtable::gtable_add_grob(grid::textGrob(sum({{ data }}$n, na.rm=TRUE), gp=grid::gpar(col=colour_results_title, fontface="bold")),
@@ -701,7 +703,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_results_title))
     ), t=4+ length(unique({{ data }}$Study))+1, l=8, r=10) %>% 
     
     gtable::gtable_add_grob(grid::textGrob(sum({{ data }}$N, na.rm=TRUE), gp=grid::gpar(col=colour_results_title, fontface="bold")),
@@ -719,7 +721,7 @@ gofer <- function(data,
                                                     place = "center",
                                                     grow = FALSE)+
                                                   ggplot2::theme_void()+
-                                                  ggplot2::theme(plot.background = ggplot2::element_rect(fill = colour_results_title))
+                                                  ggplot2::theme(plot.background = ggplot2::element_rect(colour = NA, fill = colour_results_title))
     ), t=4+ length(unique({{ data }}$Study))+1, l=12, r=12) %>% 
     
     gtable::gtable_add_grob(grid::textGrob(grade_rating, gp=grid::gpar(col=colour_results_title, fontface="bold")),
