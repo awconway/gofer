@@ -4,24 +4,41 @@
 \alias{gofer}
 \title{gofer diagram}
 \usage{
-gofer(data, data_age, ma_effect, ma_lower, ma_upper, dodge_width = 0.7,
-  range_title = "TEMPERATURE", range_unit = "°C",
+gofer(
+  data,
+  data_age,
+  ma_effect,
+  ma_lower,
+  ma_upper,
+  dodge_width = 0.7,
+  range_title = "TEMPERATURE",
+  range_unit = "°C",
   range_results_subtitle = "temperature (°C)",
-  colour_study_title = "#0080ff", colour_RoB_title = "#52ae32",
-  colour_participants_title = "#ee7219", colour_mean_age = "coral",
-  shape_mean_age = "circle", colour_median_age = "orange",
-  shape_median_age = "diamond", colour_age_background = "white",
+  colour_study_title = "#0080ff",
+  colour_RoB_title = "#52ae32",
+  colour_participants_title = "#ee7219",
+  colour_mean_age = "coral",
+  shape_mean_age = "circle",
+  colour_median_age = "orange",
+  shape_median_age = "diamond",
+  colour_age_background = "white",
   colour_age_gridlines = "#FFE5CC",
   colour_measurements_title = "#930093",
-  colour_sample_size = "#930093", colour_range = "#990099",
+  colour_sample_size = "#930093",
+  colour_range = "#990099",
   colour_range_background = "white",
-  colour_range_gridlines = "#FFCCFF", colour_measurements = "#930093",
-  colour_results_title = "#002a60", colour_results = "#002a60",
+  colour_range_gridlines = "#FFCCFF",
+  colour_measurements = "#930093",
+  colour_results_title = "#002a60",
+  colour_results = "#002a60",
   colour_results_background = "#BFD5E3",
   colour_results_gridlines = "white",
-  age_legend_text_direction = "horizontal", age_legend_text_size = 8,
-  age_legend_position = c(0.5, 0.02), measurements_logscale = FALSE,
-  grade_rating)
+  age_legend_text_direction = "horizontal",
+  age_legend_text_size = 8,
+  age_legend_position = c(0.5, 0.02),
+  measurements_logscale = FALSE,
+  grade_rating
+)
 }
 \arguments{
 \item{data}{include here descriptions of each argument we include in the function}
